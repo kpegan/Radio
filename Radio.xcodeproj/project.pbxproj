@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		FBE14328118B102B0097861D /* RadioRadio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadioRadio.h; sourceTree = "<group>"; };
-		FBE14329118B102B0097861D /* RadioRadio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RadioRadio.cpp; sourceTree = "<group>"; };
+		FBE14328118B102B0097861D /* Radio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Radio.h; sourceTree = "<group>"; };
+		FBE14329118B102B0097861D /* Radio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Radio.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		08FB7794FE84155DC02AAC07 /* RadioRadio */ = {
 			isa = PBXGroup;
 			children = (
-				FBE14328118B102B0097861D /* RadioRadio.h */,
-				FBE14329118B102B0097861D /* RadioRadio.cpp */,
+				FBE14328118B102B0097861D /* Radio.h */,
+				FBE14329118B102B0097861D /* Radio.cpp */,
 			);
 			name = RadioRadio;
 			sourceTree = "<group>";
@@ -24,16 +24,16 @@
 /* End PBXGroup section */
 
 /* Begin PBXLegacyTarget section */
-		D28A88AD04BDD90700651E21 /* RadioRadio */ = {
+		D28A88AD04BDD90700651E21 /* Radio */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 1DEB918F08733D9F0010E9CD /* Build configuration list for PBXLegacyTarget "RadioRadio" */;
+			buildConfigurationList = 1DEB918F08733D9F0010E9CD /* Build configuration list for PBXLegacyTarget "Radio" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
 			dependencies = (
 			);
-			name = RadioRadio;
+			name = Radio;
 			passBuildSettingsInEnvironment = 1;
 			productName = RadioRadio;
 		};
@@ -42,14 +42,14 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 1DEB919308733D9F0010E9CD /* Build configuration list for PBXProject "RadioRadio" */;
+			buildConfigurationList = 1DEB919308733D9F0010E9CD /* Build configuration list for PBXProject "Radio" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
 			mainGroup = 08FB7794FE84155DC02AAC07 /* RadioRadio */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D28A88AD04BDD90700651E21 /* RadioRadio */,
+				D28A88AD04BDD90700651E21 /* Radio */,
 			);
 		};
 /* End PBXProject section */
@@ -66,7 +66,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = RadioRadio;
+				PRODUCT_NAME = Radio;
 			};
 			name = Debug;
 		};
@@ -77,7 +77,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = RadioRadio;
+				PRODUCT_NAME = Radio;
 			};
 			name = Release;
 		};
@@ -107,7 +107,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB918F08733D9F0010E9CD /* Build configuration list for PBXLegacyTarget "RadioRadio" */ = {
+		1DEB918F08733D9F0010E9CD /* Build configuration list for PBXLegacyTarget "Radio" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB919008733D9F0010E9CD /* Debug */,
@@ -116,7 +116,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1DEB919308733D9F0010E9CD /* Build configuration list for PBXProject "RadioRadio" */ = {
+		1DEB919308733D9F0010E9CD /* Build configuration list for PBXProject "Radio" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB919408733D9F0010E9CD /* Debug */,
