@@ -54,23 +54,65 @@
 #define RF12_868MHZ     2
 #define RF12_915MHZ     3   //Used in the North and South America
 
+//Message and packet lengths
+#define MAX_MESSAGE 63                    //Length of actual message
+#define MAX_PACKET MAX_MESSAGE + 4        //Message + header and crc
+#define MAX_SIGNAL MAX_PACKET + 7         //Packet + preamble, sync and dummy bytes
+
+//These globals are where data about incoming and outgoing data are stored during transmission
+static volatile uint8_t RXbuffer[MAX_PACKET];  //Buffer of incoming data  (include header and crc)
+static volatile uint8_t TXbuffer[MAX_SIGNAL];  //Buffer of data going out (includes preamble and dummy bits)
+
+static volatile uint8_t RXlength;     //RXlength and TXlength represent the length of...
+static volatile uint8_t TXlength;     //data excluding headers, crc sync or dummy bytes
+
+static volatile uint8_t RXposition;   //Current position in the buffer
+static volatile uint8_t TXposition;
+
+static volatile uint16_t RX_crc;      //Variable for storing the value of CRC as calculated  
+
+static volatile uint8_t RXavailable;   //1 if message has finished receiving
+
+static volatile uint8_t RadioState;     //State of the radio
+
+//Possible states of the radio
+enum {
+    LISTENING,    //Waiting for incoming data
+    RECIEVING,    //Receiving a packet
+    RECIEVE_DONE, //Finished receiving a packet
+    SENDING,      //Sending packet
+    SEND_DONE,    //Finished sending
+    IDLE            
+};
 
 class Radio
 {
 public:
     Radio(char freq, char grp, char node); 
-	void begin();  //Initialize the radio
-    void send(char destination, char *message);  //Send a message
-    //void send(char destination, char *data, boolean anon);   //Send a message anonymously
-    boolean received(); //Has a message been received?
-    void read(char *message); //Read the message into char array at message
+	void begin();  
+    void write(char destination, char *message);  
+    //void send(char destination, char *data, boolean anon); 
+    boolean available();   
+    void read();
     
-    uint16_t SPIcmd(uint16_t cmd);      //give command to RFM12B via SPI
+    char _message[MAX_MESSAGE];
+    char sender();
+    char receiver();
+    char length();
+    
+    static void radioInterrupt();          //ISR for send receiver data
+    
+    static uint16_t SPIcmd(uint16_t cmd);  //give command to RFM12B via SPI
+    static void resetFIFO();
     
 private:
-	uint8_t _frequency;            //Carrier frequency: RF12_433MHZ, RF12_868MHZ or RF12_915MHZ 
-	uint8_t _group;                //Network group 212 (0xD4) is default.
-	uint8_t _nodeID;               //Node ID can be 1-31
+	uint8_t _frequency;  //Carrier frequency: RF12_433MHZ, RF12_868MHZ or RF12_915MHZ 
+	uint8_t _group;      //Network group 212 (0xD4) is default.
+	uint8_t _nodeID;     //Node ID can be 1-31
+    
+    uint8_t _sender;
+    uint8_t _receiver;
+    uint8_t _length;
 };
 
 #endif

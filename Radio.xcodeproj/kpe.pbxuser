@@ -12,7 +12,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					585,
+					833,
 					20,
 					48,
 					43,
@@ -27,6 +27,28 @@
 					PBXFileDataSource_Errors_ColumnID,
 					PBXFileDataSource_Warnings_ColumnID,
 					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					793,
+					60,
+					20,
+					48.16259765625,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
 			PBXPerProjectTemplateStateSaveDate = 294328740;
@@ -48,17 +70,17 @@
 	};
 	FBE14328118B102B0097861D /* Radio.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {763, 325}}";
-			sepNavSelRange = "{380, 0}";
-			sepNavVisRange = "{0, 1007}";
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 1443}}";
+			sepNavSelRange = "{4327, 95}";
+			sepNavVisRange = "{3569, 864}";
 			sepNavWindowFrame = "{{15, 131}, {977, 642}}";
 		};
 	};
 	FBE14329118B102B0097861D /* Radio.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {763, 303}}";
-			sepNavSelRange = "{87, 0}";
-			sepNavVisRange = "{0, 119}";
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 2067}}";
+			sepNavSelRange = "{4097, 0}";
+			sepNavVisRange = "{3988, 507}";
 		};
 	};
 	FBE1432A118B102B0097861D /* Source Control */ = {
@@ -100,7 +122,7 @@
 		fRef = FBE14329118B102B0097861D /* Radio.cpp */;
 		name = "RadioRadio.cpp: 7";
 		rLen = 0;
-		rLoc = 87;
+		rLoc = 81;
 		rType = 0;
 		vrLen = 119;
 		vrLoc = 0;
@@ -110,7 +132,7 @@
 		fRef = FBE14329118B102B0097861D /* Radio.cpp */;
 		name = "RadioRadio.cpp: 7";
 		rLen = 0;
-		rLoc = 87;
+		rLoc = 81;
 		rType = 0;
 		vrLen = 119;
 		vrLoc = 0;
@@ -120,7 +142,7 @@
 		fRef = FBE14329118B102B0097861D /* Radio.cpp */;
 		name = "RadioRadio.cpp: 7";
 		rLen = 0;
-		rLoc = 87;
+		rLoc = 81;
 		rType = 0;
 		vrLen = 119;
 		vrLoc = 0;

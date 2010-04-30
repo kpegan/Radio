@@ -4,7 +4,7 @@
  
  Created by Kelly Egan on 4/30/10.
  
- See licence, in RadioRadio.h
+ See licence in Radio.h
  
 */
 
@@ -68,6 +68,103 @@ void Radio::begin() {
     SPIcmd(0xC800); // Low Duty-Cycle Command - NOT USED 
     SPIcmd(0xC049); // Low Battery Detector and Microcontroller Clock Divider Command - 1.66MHz,3.1
     
+}
+
+void Radio::write(char destination, char *message) {
+    uint8_t length;
+    uint16_t fullHeader = 0;    
+    uint16_t packet_crc = 0;
+    
+    //Determine length of the string if too big, just cut it off
+    length = strlen(message);
+    if(length > MAX_MESSAGE) {
+        length = MAX_MESSAGE;
+    }
+    
+    //Assemble the header
+    fullHeader = destination << 11;            //Receiver ID is 5 left most bits
+    fullHeader = fullHeader | (_nodeID << 6);  //Sender ID is next 5 bits
+    fullHeader = fullHeader | (length & 0x3F); //Length is 6 right most bits
+    
+    //Add preamble and header bytes to buffer
+    TXbuffer[0] = 0xAA;               //Preamble
+    TXbuffer[1] = 0xAA;
+    TXbuffer[2] = 0xAA;
+    TXbuffer[3] = 0x2D;               //Sync
+    TXbuffer[4] = _group;             //Sync2 (group)
+    TXbuffer[5] = fullHeader >> 8;    //Header
+    packet_crc = _crc16_update(packet_crc, TXbuffer[5] );
+    
+    TXbuffer[6] = fullHeader & 0xFF;  //Header
+    packet_crc = _crc16_update(packet_crc, TXbuffer[6] );
+    
+    //Add data to buffer
+    for (int i = 0; i < length; i++) {
+        TXbuffer[i + 7] = message[i];
+        packet_crc = _crc16_update(packet_crc, message[i] );
+    }
+    
+    //Error correction and dummy bytes
+    TXbuffer[length + 7] = packet_crc >> 8;   //error correction byte 1
+    TXbuffer[length + 8] = packet_crc & 0xFF; //error correction byte 2
+    TXbuffer[length + 9] = 0xAA;              //dummy bytes
+    TXbuffer[length + 10] = 0xAA;
+    TXbuffer[length + 11] = 0xAA;
+    
+    //Set other globals for buffer information
+    TXposition = 0;
+    if( length + 12 < MAX_SIGNAL) {
+        TXlength = length + 12;  //Total packet length (data + 12 bytes);
+    } else {
+        TXlength = MAX_SIGNAL;
+    }
+    RadioState = SENDING;
+    
+    //Turn on the transmitter
+    SPIcmd(0x0000);
+    SPIcmd(RF_XMITTER_ON);
+}
+
+boolean Radio::available() {
+    return RXavailable;
+}
+
+void Radio::read(){
+    if(RXavailable) {
+        _length = RXlength;
+        
+        //Pull the sender and receiver out of the header bytes
+        _sender = ((RXbuffer[0] & 0x07) << 2) | (RXbuffer[1] >> 6);
+        _receiver = RXbuffer[0] >> 3;
+        
+        for (int i = 0; i < RXlength; i++) {
+            _message[i] = RXbuffer[i+2];
+        }
+        
+        RadioState = LISTENING;
+        RXavailable = 0;          //Reset message received flag
+        
+        //Turn on receiver
+        SPIcmd(0x0000);
+        SPIcmd(RF_RECEIVER_ON);   //Turn receiver back on
+    }
+}
+
+char Radio::sender(){
+    return _sender;
+}
+
+char Radio::receiver(){
+    return _receiver;
+}
+
+char Radio::length(){
+    return _length;
+}
+
+void Radio::resetFIFO() {
+    SPIcmd(0xCA81);
+    SPIcmd(0xCA83);  
 }
 
 uint16_t Radio::SPIcmd(uint16_t cmd) {
