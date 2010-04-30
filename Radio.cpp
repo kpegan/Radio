@@ -46,11 +46,11 @@ void Radio::begin() {
     //Begin initialization of Radio
     SPIcmd(0x0000);
     SPIcmd(RF_SLEEP_MODE);
-    
+    delay(3000);
     //This while loop seems,on occasion to hang. Why?
     //Serial.println("Waiting...");
-    while (digitalRead(RFM_IRQ) == 0)
-        SPIcmd(0x0000);
+    //while (digitalRead(RFM_IRQ) == 0)
+    //    SPIcmd(0x0000);
     //Serial.println("Radio awake...");
     
     //Details of these commands can be found in the Command Reference
@@ -69,6 +69,7 @@ void Radio::begin() {
     SPIcmd(0xC049); // Low Battery Detector and Microcontroller Clock Divider Command - 1.66MHz,3.1
     
     attachInterrupt(0, interrupt, LOW);
+    SPIcmd(RF_RECEIVER_ON);
     
 }
 
@@ -122,6 +123,7 @@ void Radio::write(char destination, char *message) {
     }
     
     //Wait until finished receiving... this may need some work.
+    Serial.println(RadioState);
     while (RadioState == RECEIVING)
         ;
     RadioState = SENDING;
@@ -147,12 +149,13 @@ void Radio::read(){
             _message[i] = RXbuffer[i+2];
         }
         
-        RadioState = LISTENING;
-        RXavailable = 0;          //Reset message received flag
-        
         //Turn on receiver
         SPIcmd(0x0000);
         SPIcmd(RF_RECEIVER_ON);   //Turn receiver back on
+        
+        RXlength = 0;
+        RadioState = LISTENING;
+        RXavailable = 0;          //Reset message received flag
     }
 }
 
@@ -176,15 +179,27 @@ void Radio::interrupt() {
             RadioState = RECEIVING;
         case RECEIVING:
             if (response & 0x8000) {
-                if(RXposition < RXbuffer[1] + 2 && RXposition < MAX_PACKET) {
-                    RXbuffer[RXposition] = SPIcmd(0xB000) & 0x00FF;
-                    RXposition++;
-                } else {
-                    SPIcmd(RF_IDLE_MODE);
-                    resetFIFO();
-                    RXavailable = 1;
-                    RadioState = RECEIVE_DONE;
-                }
+                switch (RXposition) {
+                    case 2:
+                        RXlength = RXbuffer[1] & 0x3F;
+                    case 1:
+                    case 0:
+                        RXbuffer[RXposition] = SPIcmd(RF_RX_FIFO_READ) & 0x00FF;
+                        RXposition++;
+                        break;
+                    default:
+                        if(RXposition < RXlength + 2 && RXposition < MAX_PACKET) {
+                            RXbuffer[RXposition] = SPIcmd(RF_RX_FIFO_READ) & 0x00FF;
+                            RXposition++;
+                        } else {
+                            SPIcmd(RF_IDLE_MODE);
+                            resetFIFO();
+                            RXposition = 0;
+                            RXavailable = 1;
+                            RadioState = RECEIVE_DONE;
+                        }
+                        break;
+                }                
             }
             break;
         case RECEIVE_DONE:
@@ -195,12 +210,13 @@ void Radio::interrupt() {
                 SPIcmd(RF_TXREG_WRITE + TXbuffer[TXposition]);
                 TXposition++;
             } else {
-                RadioState = LISTENING;
+                SPIcmd(RF_IDLE_MODE);
                 resetFIFO();
-                SPIcmd(RF_IDLE_MODE);   //Turn off transmitter
-                
                 TXposition = 0;
                 TXlength = 0;
+                
+                //SPIcmd(RF_RECEIVER_ON);   //Turn off transmitter
+                RadioState = LISTENING;        
             } 
             break;
         case IDLE:
