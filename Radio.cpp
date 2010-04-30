@@ -68,6 +68,8 @@ void Radio::begin() {
     SPIcmd(0xC800); // Low Duty-Cycle Command - NOT USED 
     SPIcmd(0xC049); // Low Battery Detector and Microcontroller Clock Divider Command - 1.66MHz,3.1
     
+    attachInterrupt(0, interrupt, LOW);
+    
 }
 
 void Radio::write(char destination, char *message) {
@@ -118,6 +120,10 @@ void Radio::write(char destination, char *message) {
     } else {
         TXlength = MAX_SIGNAL;
     }
+    
+    //Wait until finished receiving... this may need some work.
+    while (RadioState == RECEIVING)
+        ;
     RadioState = SENDING;
     
     //Turn on the transmitter
@@ -160,6 +166,49 @@ char Radio::receiver(){
 
 char Radio::length(){
     return _length;
+}
+
+void Radio::interrupt() {
+    uint16_t response = 0;
+    response = SPIcmd(0x0000);
+    switch (RadioState) {
+        case LISTENING:
+            RadioState = RECEIVING;
+        case RECEIVING:
+            if (response & 0x8000) {
+                if(RXposition < RXbuffer[1] + 2 && RXposition < MAX_PACKET) {
+                    RXbuffer[RXposition] = SPIcmd(0xB000) & 0x00FF;
+                    RXposition++;
+                } else {
+                    SPIcmd(RF_IDLE_MODE);
+                    resetFIFO();
+                    RXavailable = 1;
+                    RadioState = RECEIVE_DONE;
+                }
+            }
+            break;
+        case RECEIVE_DONE:
+            //Something on finished receiving... probably don't need this.
+            break;
+        case SENDING:
+            if(TXposition < TXlength && TXposition < MAX_SIGNAL) {
+                SPIcmd(RF_TXREG_WRITE + TXbuffer[TXposition]);
+                TXposition++;
+            } else {
+                RadioState = LISTENING;
+                resetFIFO();
+                SPIcmd(RF_IDLE_MODE);   //Turn off transmitter
+                
+                TXposition = 0;
+                TXlength = 0;
+            } 
+            break;
+        case IDLE:
+            //Spend your days relaxing on a warm beach...
+            break;
+        default:
+            break;
+    }
 }
 
 void Radio::resetFIFO() {
