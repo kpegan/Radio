@@ -46,12 +46,20 @@ void Radio::begin() {
     //Begin initialization of Radio
     SPIcmd(0x0000);
     SPIcmd(RF_SLEEP_MODE);
-    delay(3000);
+
     //This while loop seems,on occasion to hang. Why?
-    //Serial.println("Waiting...");
-    //while (digitalRead(RFM_IRQ) == 0)
-    //    SPIcmd(0x0000);
-    //Serial.println("Radio awake...");
+    Serial.println("Waiting...");
+    uint16_t x = 0;
+    while ((digitalRead(RFM_IRQ) == 0) && (x < 1000)) {
+        SPIcmd(0x0000);
+        x++;
+    }
+    if (x < 1000) {
+        Serial.print("Radio awake... ");
+        Serial.println(x,DEC);
+    } else {
+        Serial.println("Slept through alarm.");
+    }
     
     //Details of these commands can be found in the Command Reference
     SPIcmd(0x80C7 | (_frequency << 4)); // EL (enable TX), EF (enable RX FIFO), 12.0pF 
@@ -67,13 +75,37 @@ void Radio::begin() {
     SPIcmd(0xE000); // Wake-Up Timer Command - NOT USED
     SPIcmd(0xC800); // Low Duty-Cycle Command - NOT USED 
     SPIcmd(0xC049); // Low Battery Detector and Microcontroller Clock Divider Command - 1.66MHz,3.1
-    
+    cli();
     attachInterrupt(0, interrupt, LOW);
-    SPIcmd(RF_RECEIVER_ON);
-    
+    uint16_t response = SPIcmd(0x0000);
+    //Serial.println(response,BIN);
+    //Serial.println("Hey fuckhead i am here");
+    while (response & 0x8000) {
+        SPIcmd(RF_TXREG_WRITE+0);
+        SPIcmd(RF_RX_FIFO_READ);
+    }
+    sei();
 }
 
-void Radio::write(char destination, char *message) {
+int Radio::canWrite() {
+    // no need to test with interrupts disabled: state TXRECV is only reached
+    // outside of ISR and we don't care if rxfill jumps from 0 to 1 here
+    cli(); // start critical section so we can call SPIcmd() safely
+    if (SPIcmd(0x0000) & RF_RSSI_BIT) {
+        // carrier sensed: we're over the RSSI threshold, don't start TX!
+        sei(); // end critical section
+        return 0;
+    }
+    SPIcmd(RF_IDLE_MODE); // stop receiver
+    //XXX just in case, don't know whether these RF21 reads are needed!
+    SPIcmd(0x0000); // status register
+    SPIcmd(RF_RX_FIFO_READ); // fifo read
+    RadioState = IDLE;
+    sei(); // end critical section
+    return 1;
+}
+
+int Radio::write(char destination, char *message) {
     uint8_t length;
     uint16_t fullHeader = 0;    
     uint16_t packet_crc = 0;
@@ -123,9 +155,27 @@ void Radio::write(char destination, char *message) {
     }
     
     //Wait until finished receiving... this may need some work.
-    Serial.println(RadioState);
+    //Serial.println(RadioState);
     while (RadioState == RECEIVING)
         ;
+    SPIcmd(0x0000);
+    
+    //Will this help, we may never know...
+    cli(); // start critical section so we can call SPIcmd() safely
+    if (SPIcmd(0x0000) & RF_RSSI_BIT) {
+        // carrier sensed: we're over the RSSI threshold, don't start TX!
+        sei(); // end critical section
+        return 0;
+    }
+    SPIcmd(RF_IDLE_MODE); // stop receiver
+    
+    SPIcmd(0x0000); // status register
+    SPIcmd(RF_RX_FIFO_READ); // fifo read
+    SPIcmd(RF_RX_FIFO_READ); // fifo read
+
+    sei(); // end critical section
+    
+    
     RadioState = SENDING;
     
     //Turn on the transmitter
@@ -174,6 +224,7 @@ char Radio::length(){
 void Radio::interrupt() {
     uint16_t response = 0;
     response = SPIcmd(0x0000);
+
     switch (RadioState) {
         case LISTENING:
             RadioState = RECEIVING;
@@ -210,13 +261,11 @@ void Radio::interrupt() {
                 SPIcmd(RF_TXREG_WRITE + TXbuffer[TXposition]);
                 TXposition++;
             } else {
+                SPIcmd(0x0000);
                 SPIcmd(RF_IDLE_MODE);
-                resetFIFO();
-                TXposition = 0;
-                TXlength = 0;
-                
+                SPIcmd(RF_TXREG_WRITE + 0xAA);
                 //SPIcmd(RF_RECEIVER_ON);   //Turn off transmitter
-                RadioState = LISTENING;        
+                RadioState = IDLE;        
             } 
             break;
         case IDLE:

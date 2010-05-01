@@ -49,6 +49,10 @@
 #define RF_RX_FIFO_READ 0xB000  // See Receiver FIFO Read command, RF12B Program Guide
 #define RF_WAKEUP_TIMER 0xE000  // See WakeUp Command, RF12B Program Guide
 
+
+#define RF_RSSI_BIT     0x0100  // Gives status of incoming data
+
+
 //RFM12B carrier frequencies
 #define RF12_433MHZ     1
 #define RF12_868MHZ     2
@@ -84,7 +88,8 @@ class Radio
 public:
     Radio(char freq, char grp, char node); 
 	void begin();  
-    void write(char destination, char *message);  
+    int canWrite();
+    int write(char destination, char *message);  
     //void send(char destination, char *data, boolean anon); 
     boolean available();   
     void read();
