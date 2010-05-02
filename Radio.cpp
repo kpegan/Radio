@@ -184,6 +184,12 @@ int Radio::write(char destination, char *message) {
 }
 
 boolean Radio::available() {
+    if (RadioState == IDLE) {
+        RadioState = LISTENING;
+        SPIcmd(0x0000);
+        SPIcmd(RF_RECEIVER_ON);
+        return 0;
+    }
     return RXavailable;
 }
 
@@ -243,6 +249,7 @@ void Radio::interrupt() {
                             RXbuffer[RXposition] = SPIcmd(RF_RX_FIFO_READ) & 0x00FF;
                             RXposition++;
                         } else {
+                            SPIcmd(0x0000);
                             SPIcmd(RF_IDLE_MODE);
                             resetFIFO();
                             RXposition = 0;
@@ -262,9 +269,8 @@ void Radio::interrupt() {
                 TXposition++;
             } else {
                 SPIcmd(0x0000);
-                SPIcmd(RF_IDLE_MODE);
-                SPIcmd(RF_TXREG_WRITE + 0xAA);
-                //SPIcmd(RF_RECEIVER_ON);   //Turn off transmitter
+                SPIcmd(RF_IDLE_MODE);            //Turn off the transceiver
+                SPIcmd(RF_TXREG_WRITE + 0xAA);   //This is some strong mojo, clears out the bad spirits
                 RadioState = IDLE;        
             } 
             break;
