@@ -99,7 +99,7 @@ public:
     
     char _message[MAX_MESSAGE];
     char sender();
-    char receiver();
+    char destination();
     char length();
     
     static void interrupt();          //ISR for send receiver data
@@ -113,8 +113,10 @@ private:
 	uint8_t _nodeID;     //Node ID can be 1-31
     
     uint8_t _sender;
-    uint8_t _receiver;
+    uint8_t _destination;
     uint8_t _length;
+    
+    void resetReceiver();
 };
 
 #endif

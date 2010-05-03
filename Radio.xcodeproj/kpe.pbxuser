@@ -51,18 +51,18 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 294434224;
-			PBXWorkspaceStateSaveDate = 294434224;
+			PBXPerProjectTemplateStateSaveDate = 294598710;
+			PBXWorkspaceStateSaveDate = 294598710;
 		};
 		perUserProjectItems = {
-			FB898D15118CDCD2003DFE4A /* PBXTextBookmark */ = FB898D15118CDCD2003DFE4A /* PBXTextBookmark */;
-			FB898D17118CDCD2003DFE4A /* PBXTextBookmark */ = FB898D17118CDCD2003DFE4A /* PBXTextBookmark */;
-			FB898D19118CDCD2003DFE4A /* PBXTextBookmark */ = FB898D19118CDCD2003DFE4A /* PBXTextBookmark */;
-			FB898D38118CED34003DFE4A /* PBXTextBookmark */ = FB898D38118CED34003DFE4A /* PBXTextBookmark */;
-			FB898D5D118DB1D0003DFE4A /* PBXTextBookmark */ = FB898D5D118DB1D0003DFE4A /* PBXTextBookmark */;
-			FB898D75118E57A4003DFE4A /* PBXTextBookmark */ = FB898D75118E57A4003DFE4A /* PBXTextBookmark */;
-			FB898D76118E57A4003DFE4A /* PBXTextBookmark */ = FB898D76118E57A4003DFE4A /* PBXTextBookmark */;
-			FB898D7F118ECAF4003DFE4A /* PBXTextBookmark */ = FB898D7F118ECAF4003DFE4A /* PBXTextBookmark */;
+			FB898D15118CDCD2003DFE4A = FB898D15118CDCD2003DFE4A /* PBXTextBookmark */;
+			FB898D17118CDCD2003DFE4A = FB898D17118CDCD2003DFE4A /* PBXTextBookmark */;
+			FB898D19118CDCD2003DFE4A = FB898D19118CDCD2003DFE4A /* PBXTextBookmark */;
+			FB898D38118CED34003DFE4A = FB898D38118CED34003DFE4A /* PBXTextBookmark */;
+			FB898D5D118DB1D0003DFE4A = FB898D5D118DB1D0003DFE4A /* PBXTextBookmark */;
+			FB898D75118E57A4003DFE4A = FB898D75118E57A4003DFE4A /* PBXTextBookmark */;
+			FB898D76118E57A4003DFE4A = FB898D76118E57A4003DFE4A /* PBXTextBookmark */;
+			FB898D7F118ECAF4003DFE4A = FB898D7F118ECAF4003DFE4A /* PBXTextBookmark */;
 		};
 		sourceControlManager = FBE1432A118B102B0097861D /* Source Control */;
 		userBuildSettings = {
@@ -83,6 +83,7 @@
 	};
 	FB898D16118CDCD2003DFE4A /* rfm12.h */ = {
 		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
 		name = rfm12.h;
 		path = "/Users/kpe/Downloads/rfm12-1.1/src/rfm12.h";
 		sourceTree = "<absolute>";
@@ -99,6 +100,7 @@
 	};
 	FB898D18118CDCD2003DFE4A /* rfm12.c */ = {
 		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.c;
 		name = rfm12.c;
 		path = "/Users/kpe/Downloads/rfm12-1.1/src/rfm12.c";
 		sourceTree = "<absolute>";
@@ -115,6 +117,7 @@
 	};
 	FB898D1A118CDCD2003DFE4A /* rfm12_config.h.demo */ = {
 		isa = PBXFileReference;
+		lastKnownFileType = text;
 		name = rfm12_config.h.demo;
 		path = "/Users/kpe/Downloads/rfm12-1.1/src/rfm12_config.h.demo";
 		sourceTree = "<absolute>";
@@ -131,6 +134,7 @@
 	};
 	FB898D39118CED34003DFE4A /* RF12.h */ = {
 		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
 		name = RF12.h;
 		path = /Users/kpe/prog/Arduino/libraries/RF12/RF12.h;
 		sourceTree = "<absolute>";
@@ -141,11 +145,6 @@
 		name = RF12.cpp;
 		path = /Users/kpe/prog/Arduino/libraries/RF12/RF12.cpp;
 		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1011, 5507}}";
-			sepNavSelRange = "{5221, 0}";
-			sepNavVisRange = "{6516, 1081}";
-		};
 	};
 	FB898D5D118DB1D0003DFE4A /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
