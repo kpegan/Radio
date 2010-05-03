@@ -65,13 +65,16 @@
 
 //These globals are where data about incoming and outgoing data are stored during transmission
 static volatile uint8_t RXbuffer[MAX_PACKET];  //Buffer of incoming data  (include header and crc)
-static volatile uint8_t TXbuffer[MAX_SIGNAL];  //Buffer of data going out (includes preamble and dummy bits)
-static volatile uint8_t RXlength;     //RXlength and TXlength represent the length of...
-static volatile uint8_t TXlength;     //data excluding headers, crc sync or dummy bytes
+static volatile uint8_t RXlength;    //Message length
+static volatile uint16_t RXcrc;      //Variable for storing the value of CRC as calculated  
+static volatile uint16_t CALC_crc;
 static volatile uint8_t RXposition;   //Current position in the buffer
-static volatile uint8_t TXposition;
-static volatile uint16_t RX_crc;      //Variable for storing the value of CRC as calculated  
 static volatile uint8_t RXavailable;   //1 if message has finished receiving
+
+static volatile uint8_t TXbuffer[MAX_SIGNAL];  //Buffer of data going out (includes preamble and dummy bits)
+static volatile uint8_t TXlength;     //data excluding headers, crc sync or dummy bytes
+static volatile uint8_t TXposition;
+
 static volatile uint8_t RadioState;     //State of the radio
 
 //Possible states of the radio

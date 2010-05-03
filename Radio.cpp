@@ -46,19 +46,11 @@ void Radio::begin() {
     //Begin initialization of Radio
     SPIcmd(0x0000);
     SPIcmd(RF_SLEEP_MODE);
-
-    //This while loop seems,on occasion to hang. Why?
-    Serial.println("Waiting...");
-    uint16_t x = 0;
-    while ((digitalRead(RFM_IRQ) == 0) && (x < 1000)) {
-        SPIcmd(0x0000);
-        x++;
-    }
-    if (x < 1000) {
-        Serial.print("Radio awake... ");
-        Serial.println(x,DEC);
-    } else {
-        Serial.println("Slept through alarm.");
+    
+    //This seems to clear out the cobwebs
+    while ((SPIcmd(0x0000) & 0x8000) || (digitalRead(RFM_IRQ) == 0)) {
+        SPIcmd(RF_TXREG_WRITE+0);  
+        SPIcmd(RF_RX_FIFO_READ);
     }
     
     //Details of these commands can be found in the Command Reference
@@ -75,32 +67,28 @@ void Radio::begin() {
     SPIcmd(0xE000); // Wake-Up Timer Command - NOT USED
     SPIcmd(0xC800); // Low Duty-Cycle Command - NOT USED 
     SPIcmd(0xC049); // Low Battery Detector and Microcontroller Clock Divider Command - 1.66MHz,3.1
-    cli();
+
+    RadioState = IDLE;
+    SPIcmd(0x0000);
+    SPIcmd(RF_IDLE_MODE);
+
     attachInterrupt(0, interrupt, LOW);
-    uint16_t response = SPIcmd(0x0000);
-    //Serial.println(response,BIN);
-    //Serial.println("Hey fuckhead i am here");
-    while (response & 0x8000) {
-        SPIcmd(RF_TXREG_WRITE+0);
-        SPIcmd(RF_RX_FIFO_READ);
-    }
-    sei();
 }
 
 int Radio::canWrite() {
-    // no need to test with interrupts disabled: state TXRECV is only reached
-    // outside of ISR and we don't care if rxfill jumps from 0 to 1 here
     cli(); // start critical section so we can call SPIcmd() safely
+    
     if (SPIcmd(0x0000) & RF_RSSI_BIT) {
         // carrier sensed: we're over the RSSI threshold, don't start TX!
         sei(); // end critical section
         return 0;
     }
+    
     SPIcmd(RF_IDLE_MODE); // stop receiver
-    //XXX just in case, don't know whether these RF21 reads are needed!
     SPIcmd(0x0000); // status register
     SPIcmd(RF_RX_FIFO_READ); // fifo read
     RadioState = IDLE;
+    
     sei(); // end critical section
     return 1;
 }
@@ -120,6 +108,7 @@ int Radio::write(char destination, char *message) {
     fullHeader = destination << 11;            //Receiver ID is 5 left most bits
     fullHeader = fullHeader | (_nodeID << 6);  //Sender ID is next 5 bits
     fullHeader = fullHeader | (length & 0x3F); //Length is 6 right most bits
+
     
     //Add preamble and header bytes to buffer
     TXbuffer[0] = 0xAA;               //Preamble
@@ -138,7 +127,7 @@ int Radio::write(char destination, char *message) {
         TXbuffer[i + 7] = message[i];
         packet_crc = _crc16_update(packet_crc, message[i] );
     }
-    
+
     //Error correction and dummy bytes
     TXbuffer[length + 7] = packet_crc >> 8;   //error correction byte 1
     TXbuffer[length + 8] = packet_crc & 0xFF; //error correction byte 2
@@ -175,12 +164,12 @@ int Radio::write(char destination, char *message) {
 
     sei(); // end critical section
     
-    
     RadioState = SENDING;
     
     //Turn on the transmitter
     SPIcmd(0x0000);
     SPIcmd(RF_XMITTER_ON);
+    return 1;
 }
 
 boolean Radio::available() {
@@ -195,23 +184,33 @@ boolean Radio::available() {
 
 void Radio::read(){
     if(RXavailable) {
+        if (RXcrc == 0) {
+            Serial.println("CRCs match.");
+        } else {
+            Serial.println("CRCs don't match.");
+        }
         _length = RXlength;
         
         //Pull the sender and receiver out of the header bytes
         _sender = ((RXbuffer[0] & 0x07) << 2) | (RXbuffer[1] >> 6);
         _receiver = RXbuffer[0] >> 3;
         
-        for (int i = 0; i < RXlength; i++) {
+        for (int i = 0; i < _length; i++) {
             _message[i] = RXbuffer[i+2];
         }
+        if(_length < MAX_MESSAGE) {
+            _message[_length] = '\0';
+        }
         
+        //Reset length, message available flag, etc.
+        RXlength = 0;            
+        RXavailable = 0;
+        RXcrc = 0;
+        RadioState = LISTENING;
+
         //Turn on receiver
         SPIcmd(0x0000);
         SPIcmd(RF_RECEIVER_ON);   //Turn receiver back on
-        
-        RXlength = 0;
-        RadioState = LISTENING;
-        RXavailable = 0;          //Reset message received flag
     }
 }
 
@@ -241,18 +240,24 @@ void Radio::interrupt() {
                         RXlength = RXbuffer[1] & 0x3F;
                     case 1:
                     case 0:
+                        
                         RXbuffer[RXposition] = SPIcmd(RF_RX_FIFO_READ) & 0x00FF;
+                        RXcrc = _crc16_update(RXcrc, RXbuffer[RXposition]);
                         RXposition++;
                         break;
                     default:
-                        if(RXposition < RXlength + 2 && RXposition < MAX_PACKET) {
+                        if(RXposition < RXlength + 4 && RXposition < MAX_PACKET) {
                             RXbuffer[RXposition] = SPIcmd(RF_RX_FIFO_READ) & 0x00FF;
+                            if (RXposition < RXlength + 2) {
+                                RXcrc = _crc16_update(RXcrc, RXbuffer[RXposition]);
+                            }
                             RXposition++;
                         } else {
                             SPIcmd(0x0000);
                             SPIcmd(RF_IDLE_MODE);
                             resetFIFO();
-                            RXposition = 0;
+                            RXcrc = RXcrc & ~((RXbuffer[RXlength+2] << 8) | RXbuffer[RXlength+3]);
+                            RXposition = 0; 
                             RXavailable = 1;
                             RadioState = RECEIVE_DONE;
                         }
