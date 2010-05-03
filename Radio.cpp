@@ -75,7 +75,7 @@ void Radio::begin() {
     attachInterrupt(0, interrupt, LOW);
 }
 
-int Radio::write(char destination, char *message) {
+int Radio::write(char destination, char *message, int anonymous = 0) {
     uint8_t length;
     uint16_t fullHeader = 0;    
     uint16_t packet_crc = ~0;
@@ -88,7 +88,9 @@ int Radio::write(char destination, char *message) {
     
     //Assemble the header
     fullHeader = destination << 11;            //Receiver ID is 5 left most bits
-    fullHeader = fullHeader | (_nodeID << 6);  //Sender ID is next 5 bits
+    if (!anonymous) {
+        fullHeader = fullHeader | (_nodeID << 6);  //Sender ID is next 5 bits
+    } 
     fullHeader = fullHeader | (length & 0x3F); //Length is 6 right most bits
 
     
@@ -153,32 +155,22 @@ int Radio::write(char destination, char *message) {
 }
 
 boolean Radio::available() {
-    if (RadioState == IDLE) {
-        RadioState = LISTENING;
-        SPIcmd(0x0000);
-        SPIcmd(RF_RECEIVER_ON);
-        return 0;
-    }
-    return RXavailable;
-}
-
-void Radio::read(){
-    if(RXavailable) {
-        _length = RXlength;
-        
-        //Pull the sender and receiver out of the header bytes
-        _sender = ((RXbuffer[0] & 0x07) << 2) | (RXbuffer[1] >> 6);
-        _destination = RXbuffer[0] >> 3;
-        
-        for (int i = 0; i < _length; i++) {
-            _message[i] = RXbuffer[i+2];
+    if (RXavailable) {
+        if (RXdestination == _nodeID || RXdestination == 0) {
+            if (!RXcrc) {
+                read();
+                resetReceiver();
+                return 1;
+            } else {
+                resetReceiver();
+            }
+        } else {
+            resetReceiver();
         }
-        if(_length < MAX_MESSAGE) {
-            _message[_length] = '\0';
-        }
-        
+    } else if (RadioState == IDLE) {
         resetReceiver();
-    }
+    } 
+    return 0;
 }
 
 char Radio::sender(){
@@ -275,6 +267,21 @@ uint16_t Radio::SPIcmd(uint16_t cmd) {
 }
 
 //Radio class PRIVATE METHODS
+
+void Radio::read(){
+    _length = RXlength;
+    
+    //Pull the sender and receiver out of the header bytes
+    _sender = ((RXbuffer[0] & 0x07) << 2) | (RXbuffer[1] >> 6);
+    _destination = RXbuffer[0] >> 3;
+    
+    for (int i = 0; i < _length; i++) {
+        _message[i] = RXbuffer[i+2];
+    }
+    if(_length < MAX_MESSAGE) {
+        _message[_length] = '\0';
+    }        
+}
 
 void Radio::resetReceiver() {
     //Reset length, message available flag, etc.

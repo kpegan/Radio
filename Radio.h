@@ -66,7 +66,10 @@
 //These globals are where data about incoming and outgoing data are stored during transmission
 static volatile uint8_t RXbuffer[MAX_PACKET];  //Buffer of incoming data  (include header and crc)
 static volatile uint8_t RXlength;    //Message length
-static volatile uint16_t RXcrc;      //Variable for storing the value of CRC as calculated  
+static volatile uint16_t RXcrc;      //Variable for storing the value of CRC as calculated
+
+#define RXdestination RXbuffer[0] >> 3
+
 static volatile uint16_t CALC_crc;
 static volatile uint8_t RXposition;   //Current position in the buffer
 static volatile uint8_t RXavailable;   //1 if message has finished receiving
@@ -92,10 +95,9 @@ public:
     Radio(char freq, char grp, char node); 
 	void begin();  
     int canWrite();
-    int write(char destination, char *message);  
-    //void send(char destination, char *data, boolean anon); 
+    int write(char destination, char *message, int anonymous);
+    //int write(char destination, char *message); 
     boolean available();   
-    void read();
     
     char _message[MAX_MESSAGE];
     char sender();
@@ -117,6 +119,7 @@ private:
     uint8_t _length;
     
     void resetReceiver();
+    void read();
 };
 
 #endif
