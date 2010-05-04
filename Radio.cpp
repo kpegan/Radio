@@ -173,6 +173,10 @@ boolean Radio::available() {
     return 0;
 }
 
+char * Radio::message(){
+    return _message;
+}
+
 char Radio::sender(){
     return _sender;
 }

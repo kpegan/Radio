@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		FBD10AB511908B1B00FF18AB /* Radio_SendConfirm.pde */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Radio_SendConfirm.pde; sourceTree = "<group>"; };
 		FBE14328118B102B0097861D /* Radio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Radio.h; sourceTree = "<group>"; };
 		FBE14329118B102B0097861D /* Radio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Radio.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -16,9 +17,19 @@
 			isa = PBXGroup;
 			children = (
 				FBE14328118B102B0097861D /* Radio.h */,
+				FBD10AB411908B1B00FF18AB /* Radio_SendConfirm */,
 				FBE14329118B102B0097861D /* Radio.cpp */,
 			);
 			name = RadioRadio;
+			sourceTree = "<group>";
+		};
+		FBD10AB411908B1B00FF18AB /* Radio_SendConfirm */ = {
+			isa = PBXGroup;
+			children = (
+				FBD10AB511908B1B00FF18AB /* Radio_SendConfirm.pde */,
+			);
+			name = Radio_SendConfirm;
+			path = examples/Radio_SendConfirm;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

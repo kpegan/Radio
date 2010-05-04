@@ -100,6 +100,8 @@ public:
     boolean available();   
     
     char _message[MAX_MESSAGE];
+    
+    char* message();
     char sender();
     char destination();
     char length();
