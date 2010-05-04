@@ -1,0 +1,81 @@
+Radio
+
+Created by Kelly Egan on 4/30/10.
+
+This library is indebted to the RF12 library created by Jean-Claude Wippler @ 
+Jee labs http://jeelaps.net It is substantially different than the his 
+library particularly in packet structure and that it is now a C++ class. I also
+attempted to additionally comment the source code mostly for my own understanding.
+
+The MIT License
+
+Copyright (c) <2010> Kelly Egan
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+
+Methods of the Radio class
+
+begin(char frequency, char group, char nodeid) 
+   This function initializes the radios parameters and begins listening for reception.
+   
+   frequency - The carrier frequency the radio will operate at. Options include:
+               RF12_433MHZ, RF12_868MHZ, RF12_915MHZ.  This depends on which radio 
+               you use and what country you are operating in. 915Mhz is used in North America.
+               
+   group - (0-255) The group is acuttualy the sync byte that the radio responds to. Radios set to the same
+           group will see messages addressed to that group, while other radios will ignore such 
+           messages.
+   
+   nodeid - (1-31) The identifier of this particular radio. There is nothing stopping to radios
+            from having the same id but it may cause confusion in communications. Depending on
+            context a Node ID of 0 is either anonymous or broadcast.
+
+
+available()
+   Returns true when there is a message waiting to be read. Must be called before
+   accessing other message data.
+ 
+message() 
+   The message received as a char[].
+
+length() 
+   Length of the message in bytes/characters.
+
+sender()
+   Who sent the message. If it is 0 it is considered anonymous.
+
+destination()
+   Who received the message. This is normally the ID of the receiving radio, but 
+   if, the message is broadcast it will be 0. 
+                
+
+write(destination, message, anonymous)
+   Send a message out from the radio. Returns true if successfully transmitted. Note this
+   does not mean the other radio received the message. 
+   
+   destination - The ID of the destination node. If 0 considered broadcast.
+   
+   message - the message to be sent as char[].
+   
+   anonymous - If set to true the message will be sent anonymously.
+
+
+Arduino pins connected to RFM12B:
+
+2 RFM IRQ     Interupt pin from RFM12B
+10 SPI_SS     Chip select. 
+11 SPI_MOSI   Data output from Arduino
+12 SPI_MISO   Data input from RFM12B
+13 SPI_SCK    Clock input
+
+Note most Arduinos and clones run on 5V while the RFM12B runs on 3.3V
+before connecting an Arduino to the RFM12B be sure and account for this voltage difference.

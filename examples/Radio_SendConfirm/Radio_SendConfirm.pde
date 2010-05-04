@@ -12,6 +12,14 @@
   they take turns sending messages and sending confirmations.
  
   There is a 10 second interval between exchanges. 
+  
+  Arduino pins connected to RFM12B:
+  
+  2 RFM IRQ     Interupt pin from RFM12B
+  10 SPI_SS     Chip select. 
+  11 SPI_MOSI   Data output from Arduino
+  12 SPI_MISO   Data input from RFM12B
+  13 SPI_SCK    Clock input
 
   Created May 4 2010
   by Kelly Egan
