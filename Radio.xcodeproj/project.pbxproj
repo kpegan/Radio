@@ -17,8 +17,8 @@
 			isa = PBXGroup;
 			children = (
 				FBE14328118B102B0097861D /* Radio.h */,
-				FBD10AB411908B1B00FF18AB /* Radio_SendConfirm */,
 				FBE14329118B102B0097861D /* Radio.cpp */,
+				FBD10AB411908B1B00FF18AB /* Radio_SendConfirm */,
 			);
 			name = RadioRadio;
 			sourceTree = "<group>";

@@ -43,6 +43,15 @@ void Radio::begin() {
     pinMode(RFM_IRQ, INPUT);
     digitalWrite(RFM_IRQ, 1); //pull-up
     
+    //Setup preamble bytes in transmit buffer
+    //since this is always the same, why not do it here
+    
+    //Add preamble and header bytes to buffer
+    TXbuffer[0] = 0xAA;               //Preamble
+    TXbuffer[1] = 0xAA;
+    TXbuffer[2] = 0xAA;
+    TXbuffer[3] = 0x2D;               //Sync
+    
     //Begin initialization of Radio
     SPIcmd(0x0000);
     SPIcmd(RF_SLEEP_MODE);
@@ -93,12 +102,7 @@ int Radio::write(char destination, char *message, int anonymous = 0) {
     } 
     fullHeader = fullHeader | (length & 0x3F); //Length is 6 right most bits
 
-    
-    //Add preamble and header bytes to buffer
-    TXbuffer[0] = 0xAA;               //Preamble
-    TXbuffer[1] = 0xAA;
-    TXbuffer[2] = 0xAA;
-    TXbuffer[3] = 0x2D;               //Sync
+    //Add header bytes to buffer
     TXbuffer[4] = _group;             //Sync2 (group)
     TXbuffer[5] = fullHeader >> 8;    //Header
     packet_crc = _crc16_update(packet_crc, TXbuffer[5] );

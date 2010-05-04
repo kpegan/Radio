@@ -20,6 +20,9 @@
   11 SPI_MOSI   Data output from Arduino
   12 SPI_MISO   Data input from RFM12B
   13 SPI_SCK    Clock input
+  
+  Note most Arduinos and clones run on 5V while the RFM12B runs on 3.3V
+  before connecting an Arduino to the RFM12B be sure and account for this voltage difference.
 
   Created May 4 2010
   by Kelly Egan
@@ -99,7 +102,7 @@ void loop() {
   
   //Attempt to send message every 10 seconds
   if( (millis() - lastMessage) > 10000) {
-    //If haven't failed, yet and have not yet confirmed keep trying
+    //If haven't failed yet and have not yet confirmed keep trying
     if( !failed && !confirmed )  {
       //If tried less than 5 times keep going.
       if( tries < 5 ) {
@@ -107,7 +110,7 @@ void loop() {
         Serial.print("<OUTGOING> ");
         Serial.print(sent);
         Serial.print(" ");
-        Serial.println(tries + 1);
+        Serial.print(tries + 1);
         Serial.println(" attempt(s).");
         tries++;
       } else {
