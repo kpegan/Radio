@@ -1,4 +1,5 @@
 /*
+
   Radio library example: send and confirm
   
   This program uses the Radio library to send a message via wireless 
@@ -7,13 +8,14 @@
   is a Hope RFM12B FSK radio connected to an arduino/arduino clone 
   such as the JeeNode from http://jeelabs.net 
   
-  When program is loaded on two radios they take turns sending 
-  messages and sending confirmations.
+  When program is loaded on two arduino clones with a RFM12B tranceiver
+  they take turns sending messages and sending confirmations.
  
   There is a 10 second interval between exchanges. 
 
   Created May 4 2010
   by Kelly Egan
+  
 */
 
 #include <Radio.h>
