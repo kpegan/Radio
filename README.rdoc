@@ -1,4 +1,4 @@
-Radio
+= Radio
 
 Created by Kelly Egan on 4/30/10.
 
@@ -7,7 +7,7 @@ Jee labs http://jeelaps.net It is substantially different than the his
 library particularly in packet structure and that it is now a C++ class. I also
 attempted to additionally comment the source code mostly for my own understanding.
 
-The MIT License
+== The MIT License
 
 Copyright (c) <2010> Kelly Egan
 
@@ -22,7 +22,7 @@ The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
 
 
-Methods of the Radio class
+== Methods of the Radio class
 
 begin(char frequency, char group, char nodeid) 
    This function initializes the radios parameters and begins listening for reception.
@@ -69,13 +69,13 @@ write(destination, message, anonymous)
    anonymous - If set to true the message will be sent anonymously.
 
 
-Arduino pins connected to RFM12B:
+== Arduino pins connected to RFM12B:
+
+Note most Arduinos and clones run on 5V while the RFM12B runs on 3.3V
+before connecting an Arduino to the RFM12B be sure and account for this voltage difference.
 
 2 RFM IRQ     Interupt pin from RFM12B
 10 SPI_SS     Chip select. 
 11 SPI_MOSI   Data output from Arduino
 12 SPI_MISO   Data input from RFM12B
 13 SPI_SCK    Clock input
-
-Note most Arduinos and clones run on 5V while the RFM12B runs on 3.3V
-before connecting an Arduino to the RFM12B be sure and account for this voltage difference.
