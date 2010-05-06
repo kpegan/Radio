@@ -57,14 +57,16 @@ destination()
    Who received the message. This is normally the ID of the receiving radio, but 
    if, the message is broadcast it will be 0. 
                 
-
-write(destination, message, anonymous)
+write(destination, message)
    Send a message out from the radio. Returns true if successfully transmitted. Note this
    does not mean the other radio received the message. 
    
    destination - The ID of the destination node. If 0 considered broadcast.
    
    message - the message to be sent as char[].
+   
+write(destination, message, anonymous)
+   If anonymous is set to true message will be sent as Node 0
    
    anonymous - If set to true the message will be sent anonymously.
 
