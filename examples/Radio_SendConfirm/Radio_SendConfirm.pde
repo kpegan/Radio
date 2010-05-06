@@ -83,7 +83,7 @@ void loop() {
     //If the message matches sent string then send reply
     if( !strcmp(theRadio.message(), sent) ) {
       
-      theRadio.write(0, received, false);  //write() sends a message
+      theRadio.write(0, received);  //write() sends a message
       //First parameter is destination node ID (0 for broadcast)
       //Second is the message to be sent char
       //Third is whether or not to send message anonymously.
@@ -106,7 +106,7 @@ void loop() {
     if( !failed && !confirmed )  {
       //If tried less than 5 times keep going.
       if( tries < 5 ) {
-        theRadio.write(0,sent,0);
+        theRadio.write(0,sent);
         Serial.print("<OUTGOING> ");
         Serial.print(sent);
         Serial.print(" ");

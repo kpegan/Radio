@@ -84,7 +84,7 @@ void Radio::begin() {
     attachInterrupt(0, interrupt, LOW);
 }
 
-int Radio::write(char destination, char *message, int anonymous = 0) {
+int Radio::write(char destination, char *message, int anonymous) {
     uint8_t length;
     uint16_t fullHeader = 0;    
     uint16_t packet_crc = ~0;
@@ -96,11 +96,11 @@ int Radio::write(char destination, char *message, int anonymous = 0) {
     }
     
     //Assemble the header
-    fullHeader = destination << 11;            //Receiver ID is 5 left most bits
+    fullHeader = destination << 11;  //Receiver ID is 5 left most bits
     if (!anonymous) {
         fullHeader = fullHeader | (_nodeID << 6);  //Sender ID is next 5 bits
     } 
-    fullHeader = fullHeader | (length & 0x3F); //Length is 6 right most bits
+    fullHeader = fullHeader | (length & 0x3F);  //Length is 6 right most bits
 
     //Add header bytes to buffer
     TXbuffer[4] = _group;             //Sync2 (group)
@@ -156,6 +156,10 @@ int Radio::write(char destination, char *message, int anonymous = 0) {
     SPIcmd(0x0000);
     SPIcmd(RF_XMITTER_ON);
     return 1;
+}
+
+int Radio::write(char destination, char *message) {
+    return write(destination, message, false);
 }
 
 boolean Radio::available() {

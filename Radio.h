@@ -96,7 +96,7 @@ public:
 	void begin();  
     int canWrite();
     int write(char destination, char *message, int anonymous);
-    //int write(char destination, char *message); 
+    int write(char destination, char *message); 
     boolean available();   
     
     char _message[MAX_MESSAGE];
