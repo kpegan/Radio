@@ -82,11 +82,11 @@ static volatile uint8_t RadioState;     //State of the radio
 
 //Possible states of the radio
 enum {
-    LISTENING,    //Waiting for incoming data
-    RECEIVING,    //Receiving a packet
+    LISTENING,     //Waiting for incoming data
+    RECEIVING,     //Receiving a packet
     RECEIVE_DONE,  //Finished with incoming message;
-    SENDING,      //Sending packet
-    IDLE          //Both receiver and transceiver off
+    SENDING,       //Sending packet
+    IDLE           //Both receiver and transceiver off
 };
 
 class Radio

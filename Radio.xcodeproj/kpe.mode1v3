@@ -197,7 +197,48 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array/>
+	<array>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>FBF34C421193BC0E00AA6092</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>Radio.h</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>FBF34C431193BC0E00AA6092</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>Radio.h</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>FB260262119CF2FD00D2CE10</string>
+						<key>history</key>
+						<array>
+							<string>FBC777EE119A3B71005F20A5</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {977, 545}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>15 187 977 586 0 0 1280 778 </string>
+			</dict>
+		</dict>
+	</array>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -324,7 +365,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>FBD10AC31190D2B200FF18AB</string>
+										<string>FB260261119CF2FD00D2CE10</string>
 										<key>history</key>
 										<array>
 											<string>FB898D15118CDCD2003DFE4A</string>
@@ -332,9 +373,9 @@
 											<string>FB898D19118CDCD2003DFE4A</string>
 											<string>FB898D38118CED34003DFE4A</string>
 											<string>FB898D5D118DB1D0003DFE4A</string>
-											<string>FBD10AB71190D09700FF18AB</string>
-											<string>FBD10AC11190D2B200FF18AB</string>
-											<string>FBD10AC21190D2B200FF18AB</string>
+											<string>FBF34C3C1193BC0E00AA6092</string>
+											<string>FBF34C3D1193BC0E00AA6092</string>
+											<string>FBC777EB119A3B71005F20A5</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -346,14 +387,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1072, 453}}</string>
+								<string>{{0, 0}, {1072, 432}}</string>
 								<key>RubberWindowFrame</key>
 								<string>0 59 1280 719 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>453pt</string>
+							<string>432pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -366,14 +407,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 458}, {1072, 220}}</string>
+								<string>{{0, 437}, {1072, 241}}</string>
 								<key>RubberWindowFrame</key>
 								<string>0 59 1280 719 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
 							<key>Proportion</key>
-							<string>220pt</string>
+							<string>241pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
@@ -392,9 +433,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>FBD10AAC119073F300FF18AB</string>
+				<string>FB26025D119CCA6400D2CE10</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>FBD10AAD119073F300FF18AB</string>
+				<string>FB26025E119CCA6400D2CE10</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -533,6 +574,7 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>FBE1433C118B167D0097861D</string>
+		<string>FBF34C421193BC0E00AA6092</string>
 		<string>/Users/kpe/prog/Arduino/libraries/Radio/Radio.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -613,7 +655,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>FBE1433C118B167D0097861D</string>
-				<string>FBD10AAE119073F300FF18AB</string>
+				<string>FB260260119CCA6400D2CE10</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
