@@ -31,7 +31,7 @@ begin(char frequency, char group, char nodeid)
                RF12_433MHZ, RF12_868MHZ, RF12_915MHZ.  This depends on which radio 
                you use and what country you are operating in. 915Mhz is used in North America.
                
-   group - (0-255) The group is acuttualy the sync byte that the radio responds to. Radios set to the same
+   group - (0-255) The group is actually the sync byte that the radio responds to. Radios set to the same
            group will see messages addressed to that group, while other radios will ignore such 
            messages.
    

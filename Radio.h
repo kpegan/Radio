@@ -112,9 +112,9 @@ public:
     static void resetFIFO();
     
 private:
-	uint8_t _frequency;  //Carrier frequency: RF12_433MHZ, RF12_868MHZ or RF12_915MHZ 
-	uint8_t _group;      //Network group 212 (0xD4) is default.
-	uint8_t _nodeID;     //Node ID can be 1-31
+    uint8_t _frequency;  //Carrier frequency: RF12_433MHZ, RF12_868MHZ or RF12_915MHZ 
+    uint8_t _group;      //Network group 212 (0xD4) is default.
+    uint8_t _nodeID;     //Node ID can be 1-31
     
     uint8_t _sender;
     uint8_t _destination;
