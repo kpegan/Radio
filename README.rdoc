@@ -3,7 +3,7 @@
 Created by Kelly Egan on 4/30/10.
 
 This library is indebted to the RF12 library created by Jean-Claude Wippler @ 
-Jee labs http://jeelaps.net It is substantially different than the his 
+Jee labs http://jeelabs.net It is substantially different than the his 
 library particularly in packet structure and that it is now a C++ class. I also
 attempted to additionally comment the source code mostly for my own understanding.
 
